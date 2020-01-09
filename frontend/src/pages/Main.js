@@ -1,7 +1,27 @@
 import React from 'react';
 
-export default function Main() {
+// import logo from '../assets/logo.svg';
+
+export default function Main({ match }) {
     return (
-        <h1> Hello World</h1>
+            // <img src={logo} atl="Tindev" />
+        <div className="main-container">
+            <ul>
+                <li>
+                    <img src="" atl=""/>
+                    <footer>
+                        <strong>Filipe Deschamps</strong>
+                        <p></p>
+                    </footer>
+
+                    <div className="button">
+                        <button type="button"></button>
+
+                    </div>
+                </li>
+            </ul>
+
+
+        </div>
     );
 }
