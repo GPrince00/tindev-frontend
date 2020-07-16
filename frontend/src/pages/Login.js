@@ -1,37 +1,50 @@
-import React, { useState} from 'react';
-import './Login.css';
+import React, { useEffect, useState } from 'react';
 
-import api from '../services/api';
+import './global.css';
+import './App.css';
+import './Sidebar.css';
+import './Main.css'
 
-// import logo from '../assets/logo.svg';
+import api from './services/api';
 
-export default function Login({ history }) {
-    const [username, setUsername]= useState('');
-    
-    async function handleSubmit(e) {
-        e.preventDefault();
-     
-        const response = await api.post('/devs', {
-            username: username,
-        });
-        
-        const { id } = response.data;
+import DevForm from './components/DevForm'
+import DevItem from './components/DevItem';
 
-        history.push(`/dev/${id}`);
+function App() {
+  const [devs, setDevs] = useState([]);
+
+  useEffect(() => {
+    async function loadDevs() {
+      const response = await api.get('/devs');
+
+      setDevs(response.data);
     }
 
-    return (
-            // <img src={logo} atl="Tindev" />
-        <div className="login-container">
-            <form onSubmit={handleSubmit}>
-                <h1>LOGO</h1>
-                <input 
-                    placeholder="Digite seu usuário no Github"
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                />
-                <button type="submit">Enviar</button>
-            </form>
-        </div>
-    );
+    loadDevs();
+  }, []);
+
+  async function handleAddDev(data) {
+    const response = await api.post('/devs', data);
+
+    setDevs([...devs, response.data]);
+  }
+
+  return (
+    <div id="app">
+      <aside>
+        <strong>Cadastrar</strong>
+        <DevForm onSubmit={handleAddDev} />
+      </aside>
+
+      <main>
+        <ul>
+        {devs.map(dev => (
+          <DevItem key={dev._id} dev={dev} />
+        ))}
+        </ul>
+      </main>
+    </div>
+  );
 }
+
+export default App;
